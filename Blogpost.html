@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogpost</title>
+
+    <!-- meine externen CSS-Stylesheets -->
+    <link rel="stylesheet" href="Stylesheet.css">
+    <link rel="stylesheet navbar" href="Stylesheet_navbar.css">
+
+    <!-- Schriftart Titel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Schriftart Text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  
+  </head>
+
+  <body>
+   <div id="layout">  
+
+    <div id="navbar">
+        <nav>
+          <ul>
+            <li class="active">Projektübersicht</li>
+            <li><a href="Ergebnisse_Karte.html">Ergebnis & Karte</a></li>
+        </ul>
+        </nav>
+      </div>
+
+      <div id="main-content">
+        <p>Projektübersicht "Windkraft im Ländle"</p>
+        <h1>Nett hier. Aber wie wär´s mit Windenergie?</h1>
+        <p>Der Ausbau erneuerbarer Energien ist eine zentrale Herausforderung der Energiewende. In Deutschland spielt insbesondere die Windenergie eine wichtige Rolle, um die Stromversorgung langfristig klimaneutral zu gestalten. Gleichzeitig ist die Planung neuer Windenergieanlagen räumlich komplex. Neben guten Windverhältnissen müssen zahlreiche Umwelt-, Infrastruktur- und Planungsaspekte berücksichtigt werden.</p>
+        <p>Gerade in einem dicht besiedelten Bundesland wie Baden-Württemberg ist die Frage nach geeigneten Standorten besonders relevant. Siedlungsflächen, Naturschutzgebiete, Verkehrsinfrastruktur und andere Nutzungen begrenzen den verfügbaren Raum erheblich. Gleichzeitig verlangt das sogenannte Wind-an-Land-Gesetz, dass bis 2032 mindestens 1,8 % der Landesfläche für Windenergie ausgewiesen werden.</p>
+        <p>Um geeignete Standorte systematisch zu identifizieren, werden zunehmend Geographische Informationssysteme (GIS) eingesetzt. Sie ermöglichen es, unterschiedliche räumliche Datensätze zu kombinieren und potenzielle Flächen zu analysieren. Ziel dieses Projekts war es daher, mithilfe von offenen Geodaten und Open-Source-Software zu untersuchen:</p>
+        <h3>Wie groß ist das potenzielle Flächenangebot für Windenergie in Baden-Württemberg und welche Faktoren beeinflussen die Eignung dieser Flächen?</h3>
+        <p>Dazu wurden zunächst Flächen ausgeschlossen, auf denen Windenergieanlagen nicht realisierbar sind. Anschließend wurden die verbleibenden Potenzialflächen anhand verschiedener Kriterien analysiert und bewertet.</p>
+        <h2>Methodik</h2>
+        <p>Die Analyse wurde vollständig mit Open-Source-Werkzeugen durchgeführt, insbesondere mit der Geodatenbibliothek GDAL. Der Workflow bestand aus drei zentralen Schritten:</p>
+        <ol>
+          <li>Erstellung einer Ausschlussebene</li>
+          <li>Bestimmung der Potenzialflächen</li>
+          <li>Bewertung dieser Flächen anhand verschiedener Kriterien</li>
+        </ol>
+        <h3>Erstellung der Ausschlussflächen</h3>
+        <p>Im ersten Schritt wurden räumliche Faktoren identifiziert, die den Bau von Windenergieanlagen ausschließen oder stark einschränken. Dazu gehörten bestimmte Landnutzungsarten, Naturschutzgebiete, Verkehrsinfrastruktur, Rohstoffabbauflächen, Wasserschutzgebiete, Netzinfrastruktur, Windleistungsdichte und Hangneigung.</p>
+        <p>Die Windhöffigkeit wurde anhand der mittleren Windleistungsdichte in 160 Metern Höhe über Grund bewertet. Flächen mit mindestens 215 W/&#13217; gelten dabei als grundsätzlich geeignet für Windenergie. Auch die Topographie spielt eine wichtige Rolle. Sehr steile Hänge sind für den Bau von Windenergieanlagen nur schwer geeignet. Deshalb wurden Hangneigungen über 30 % als Ausschlusskriterium berücksichtigt.</p>
+        <p>Alle Datensätze wurden zunächst in ein einheitliches Rasterformat mit 30 Metern Auflösung umgewandelt. Dadurch konnten sie räumlich miteinander kombiniert werden. Anschließend wurden alle Ausschlusslayer zu einer gemeinsamen Ausschlussebene zusammengeführt. Jeder Rasterpixel, der von mindestens einer Einschränkung betroffen war, wurde als ungeeignet klassifiziert. Die verbleibenden Pixel bilden die Potenzialflächen, also Gebiete, in denen Windenergieanlagen aus planerischer Sicht grundsätzlich möglich sein könnten.</p>
+        <h3>Bewertung der Potenzialflächen</h3>
+        <p>Nachdem die Potenzialflächen bestimmt wurden, erfolgte eine genauere Bewertung dieser Gebiete anhand verschiedener Kriterien. Die Kriterien lassen sich in drei Kategorien unterteilen.</p>
+        <ol>
+          <li><b>Standortbedingungen:</b> Zwei wichtige physische Faktoren für die Eignung eines Standortes sind Hangneigung und Windleistungsdichte. Beide Variablen wurden in mehrere Klassen eingeteilt, um unterschiedliche Qualitätsstufen zu unterscheiden.</li>
+          <li><b>Umweltfaktoren:</b> Zusätzlich wurden verschiedene Schutzgebietstypen berücksichtigt: Landschaftsschutzgebiete, Moore, Ramsar-Gebiete und Hochwasserrisikogebiete. Diese Flächen stellen mögliche Nutzungskonflikte dar, auch wenn sie nicht zwangsläufig einen vollständigen Ausschluss bedeuten.</li>
+          <li><b>Infrastruktur:</b> Ein weiterer wichtiger Faktor ist die Anbindung an das Stromnetz. Windenergieanlagen müssen an bestehende Netze angeschlossen werden, weshalb die Nähe zu Umspannwerken als positiver Standortfaktor betrachtet wurde. Dazu wurden Pufferzonen um Umspannwerke erstellt. Zusätzlich wurden im Regionalplan ausgewiesene Vorranggebiete für Windenergie berücksichtigt. Alle Kriterien wurden in Rasterdaten umgewandelt und anschließend auf die zuvor berechneten Potenzialflächen zugeschnitten.</li>
+        </ol>
+        <h2>Technische Umsetzung</h2>
+        <p>Die gesamte Analyse wurde mit Skripten umgesetzt, die auf Werkzeugen der GDAL-Bibliothek basieren. Diese ermöglichen eine automatisierte Verarbeitung großer Geodatensätze. Ursprünglich war geplant, eine multikriterielle Entscheidungsanalyse durchzuführen. Aufgrund der großen Datenmenge erwies sich dieser Ansatz jedoch als zu rechenintensiv. Stattdessen wurde die Analyse auf eine Kombination verschiedener Rasteroperationen reduziert. <br> Während der Datenverarbeitung traten mehrere praktische Herausforderungen auf: Viele Datensätze lagen in unterschiedlichen Formaten vor und mussten vereinheitlicht werden. Die Datenqualität war teilweise begrenzt, insbesondere bei Infrastrukturdaten. Einige Datensätze konnten nicht in der gewünschten Detailtiefe heruntergeladen werden. <Br> Solche Einschränkungen sind typisch für Analysen mit offenen Geodaten und müssen bei der Interpretation der Ergebnisse berücksichtigt werden.</p>
+        <h2>Zusammenfassung</h2>
+        <p>Die Analyse zeigt, dass nach Anwendung verschiedener Ausschlusskriterien nur etwa 3,8 % der Fläche Baden-Württembergs grundsätzlich für Windenergie geeignet erscheinen.</p>
+        <p>Dieses Ergebnis deutet darauf hin, dass das politisch gesetzte Ziel von 1,8 % der Landesfläche für Windenergie grundsätzlich erreichbar sein könnte. Gleichzeitig zeigt die Analyse, dass viele dieser Flächen zusätzliche Einschränkungen aufweisen - etwa durch Topographie, Schutzgebiete oder Infrastruktur.</p>
+        <p>Besonders auffällig ist der hohe Anteil von Waldflächen innerhalb der Potenzialgebiete, was in der Praxis häufig zu Konflikten zwischen Energiepolitik und Naturschutz führt. Gleichzeitig zeigt die Untersuchung, dass es durchaus Gebiete mit günstigen Standortbedingungen gibt, insbesondere dort, wo gute Windverhältnisse mit vorhandener Energieinfrastruktur zusammenfallen.</p>
+        <p>Neben den konkreten Ergebnissen zeigt das Projekt auch, dass Open-Source-Geodaten und freie GIS-Werkzeuge eine transparente Grundlage für räumliche Analysen bieten können. Durch die Nutzung von Skripten ist der gesamte Workflow reproduzierbar und kann leicht auf andere Regionen übertragen werden.</p>
+        <p>Für zukünftige Arbeiten könnten zusätzliche Faktoren wie wirtschaftliche Kriterien, detailliertere Umweltbewertungen, eine gewichtete multikriterielle Analyse oder ein Vergleich mit bestehenden Windenergieanlagen integriert werden.</p>
+        <p>Solche Erweiterungen könnten dazu beitragen, die räumliche Planung der Energiewende noch fundierter zu unterstützen.</p>
+      </div>
+
+    </div>
+
+  </body>
+</html>

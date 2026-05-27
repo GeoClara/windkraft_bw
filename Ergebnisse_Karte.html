@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ErgebnisseKarte</title>
+
+    <!-- meine externen Stylesheets -->
+    <link rel="stylesheet" href="Stylesheet.css">
+    <link rel="stylesheet navbar" href="Stylesheet_navbar.css">
+    
+    <!-- Schriftart Titel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap" rel="stylesheet">
+
+    <!-- OpenLayers CSS & Skript-->
+    <link href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/proj4@2.15.0/dist/proj4.min.js"></script>
+
+  </head>
+
+  <body>
+  <div id="layout">
+
+    <div id="navbar">
+        <nav>
+          <ul>
+            <li><a href="Blogpost.html">Projektübersicht</a></li>
+            <li class="active">Ergebnis & Karte</li>
+        </ul>
+        </nav>
+      </div>
+
+      <div id="main-content">
+        <h1>Ergebnisse der Analyse</h1>
+        <h2>Kartenansicht</h2>
+        <p><b>Hinweis:</b> Hier werden große Datenmengen verarbeitet. Gib der Karte ein paar Sekunden, um alles richtig anzuzeigen! &#128526; </p>
+
+        <div id="map">
+          <div id="legend" class="legend">
+            <h3>Layeranzeige</h3>
+            <label>
+              <input type="checkbox" id="potflaecheToggle" checked>
+              Potenzialfläche
+            </label>
+            <label>
+              <input type="checkbox" id="forstToggle" checked>
+              Forst
+            </label>
+            <label>
+              <input type="checkbox" id="schutzgebieteToggle" checked>
+              Schutzgebiete
+            </label>
+            <label>
+              <input type="checkbox" id="hochrisikoToggle" checked>
+              hohes Risiko
+            </label>
+            <label>
+              <input type="checkbox" id="windToggle" checked>
+              gute Windleistung
+            </label>
+            <label>
+              <input type="checkbox" id="gunstToggle" checked>
+              Gunstfaktoren
+            </label>
+          </div>
+        </div>
+
+        <h3>Potenzialfläche</h3>
+        <p>Nach Anwendung aller Ausschlusskriterien verbleiben in Baden-Württemberg etwa 135.090 Hektar Potenzialfläche für Windenergie. Im Verhältnis zur gesamten Landesfläche von etwa 3,57 Millionen Hektar entspricht dies ungefähr 3,8% der Landesfläche. Damit zeigt sich deutlich, dass räumliche Restriktionen das verfügbare Flächenangebot erheblich reduzieren.</p>
+        <h3>Forst</h3>
+        <p>Ein großer Teil der Potenzialflächen liegt im Wald. Insgesamt befinden sich etwa 93.921 Hektar der Potenzialflächen in Waldgebieten. Das entspricht ungefähr 70% der gesamten Potenzialfläche. Dieses Ergebnis deutet darauf hin, dass ein Ausbau der Windenergie in Baden-Württemberg häufig mit der Nutzung von Waldflächen verbunden wäre.</p>
+        <h3>Schutzgebiete</h3>
+        <p>Auch innerhalb der Potenzialflächen treten weiterhin Überschneidungen mit bestimmten Schutzgebieten auf. Die Analyse zeigt, dass etwa 22.200 Hektar der Potenzialflächen in Landschaftsschutzgebieten oder Mooren liegen. Das entspricht etwa 16,4 % der Potenzialflächen. Solche Überschneidungen können potenzielle Nutzungskonflikte zwischen Energiewende und Naturschutz darstellen.</p>
+        <h3>Stark risikobehaftete Flächen</h3>
+        <p>Wenn mehrere kritische Faktoren kombiniert werden - etwa geringe Windleistung, hohe Hangneigung oder Schutzgebiete - zeigt sich, dass ein großer Teil der Potenzialflächen zusätzliche Einschränkungen aufweist. Insgesamt betreffen solche Risikofaktoren etwa 91.566 Hektar der Potenzialflächen. Das entspricht rund 67,8% der Potenzialflächen.</p>
+        <h3>gute Windleistung</h3>
+        <p>Etwa 8,4% der Potenzialfläche weisen eine besonders gute Windleistungsdichte von über 310 W/&#13217; auf.</p>
+        <h3>Gunstfaktoren</h3>
+        <p>Neben Einschränkungen wurden auch positive Standortfaktoren untersucht: gute Windverhältnisse, Nähe zu Umspannwerken und Lage in Windvorranggebieten. Diese günstigen Faktoren treten auf etwa 39.046 Hektar auf, was ungefähr 29 % der Potenzialfläche entspricht.</p>
+
+    <!-- OpenLayers JS -->
+    <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
+
+    <script>
+
+  // EPSG:25832 registrieren
+  proj4.defs(
+    "EPSG:25832",
+    "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs"
+  );
+  ol.proj.proj4.register(proj4);
+
+  // Karte
+  const map = new ol.Map({
+    target: 'map',
+
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.XYZ({
+          url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+          attributions: '© Esri'
+        })
+      })
+    ],
+
+    view: new ol.View({
+      projection: 'EPSG:25832',
+
+      center: ol.proj.transform(
+        [9.003889, 48.661944],
+        'EPSG:4326',
+        'EPSG:25832'
+      ),
+      zoom: 8.2
+    })
+  });
+
+     // Layer Potenzialfläche
+const Potflaeche = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'layer/Potenzialflaeche.geojson',
+    format: new ol.format.GeoJSON(),
+    layerName: 'Potenzialflaeche'
+  }),
+  style: new ol.style.Style({
+  fill: new ol.style.Fill({
+    color: 'rgba(80, 80, 80, 0.6)'
+  }),
+
+  stroke: new ol.style.Stroke({
+    color: 'rgba(40, 40, 40, 1)',
+    width: 2
+  })
+  })
+});
+map.addLayer(Potflaeche);
+
+   // Layer Forst
+const Forst = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'layer/Forst.geojson',
+    format: new ol.format.GeoJSON(),
+  }),
+  style: new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(4, 133, 43, 0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+    color: 'rgba(4, 133, 43, 1)',
+    width: 2,
+    })
+    })
+});
+map.addLayer(Forst);
+
+   // Layer Schutzgebiete
+const Schutzgebiete = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'layer/Schutzgebiete.geojson',
+    format: new ol.format.GeoJSON(),
+  }),
+  style: new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(83, 222, 2, 0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+    color: 'rgba(83, 222, 2, 1)',
+    width: 2,
+    })
+    })
+});
+map.addLayer(Schutzgebiete);
+
+   // Layer Hochrisiko
+const Hochrisiko = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'layer/Risiko_hoch.geojson',
+    format: new ol.format.GeoJSON(),
+  }),
+  style: new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(245, 5, 5, 0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+    color: 'rgba(245, 5, 5, 1)',
+    width: 2,
+    })
+    })
+});
+map.addLayer(Hochrisiko);
+
+   // Layer Windleistung
+const Wind = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'layer/Windleistung_gut.geojson',
+    format: new ol.format.GeoJSON(),
+  }),
+  style: new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(16, 184, 222, 0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+    color: 'rgba(16, 184, 222, 1)',
+    width: 2,
+    })
+    })
+});
+map.addLayer(Wind);
+
+   // Layer Gunstfaktoren
+const Gunst = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'layer/Gunstfaktoren.geojson',
+    format: new ol.format.GeoJSON(),
+  }),
+  style: new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(235, 223, 7, 0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+    color: 'rgba(235, 223, 7, 1)',
+    width: 2,
+    })
+    })
+});
+map.addLayer(Gunst);
+
+// Layer-Sichtbarkeit umschalten Legende
+document.getElementById('potflaecheToggle')
+  .addEventListener('change', function () {
+    Potflaeche.setVisible(this.checked);
+});
+document.getElementById('forstToggle')
+  .addEventListener('change', function () {
+    Forst.setVisible(this.checked);
+});
+document.getElementById('schutzgebieteToggle')
+  .addEventListener('change', function () {
+    Schutzgebiete.setVisible(this.checked);
+});
+document.getElementById('hochrisikoToggle')
+  .addEventListener('change', function () {
+    Hochrisiko.setVisible(this.checked);
+});
+document.getElementById('windToggle')
+  .addEventListener('change', function () {
+    Wind.setVisible(this.checked);
+});
+document.getElementById('gunstToggle')
+  .addEventListener('change', function () {
+    Gunst.setVisible(this.checked);
+});
+    </script>
+
+  </div>
+</div>
+
+</body>
+</html>

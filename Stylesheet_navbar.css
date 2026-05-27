@@ -1,0 +1,53 @@
+#navbar {
+    position: sticky;
+    top:0;
+    width: 18%;
+}
+/* Sorgt dafür, dass die Navigationsleiste stets, auch beim Scrollen, oben auf dem Bildschirm zu sehen ist. */ 
+
+#navbar li {
+    /* Design für die Elemente der Liste, also die eingebundenen Seiten Home, Content und Impressum, die im Frontend als Kacheln erscheinen */ 
+    overflow: hidden;
+    background-color: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    /* Design der Kacheln um die Schrift, mit denen man zu den anderen Seiten navigieren kann */ 
+
+    font-family: sans-serif;
+    font-size: large;
+    color: #000000;
+    /* Design der Schrift */  
+  
+    display: inline-block;
+    color: #000000;
+    padding: 14px 16px;
+  
+    list-style: none;
+    /* Design der Kacheln */  
+
+    margin-top: 15px;
+    margin-bottom: 10px;
+    /* Höhe des "Hintergrundstreifens" der Navigationsleiste */  
+     }
+
+#navbar a {
+    text-decoration: none;
+    color: black;
+}
+/* Wenn innerhalb der Navigationsleiste mit einem Wort auf eine Seite verlinkt wird, soll dieses weder unterstrichen noch eingefärbt sein. 
+    Sprich: Besondere Hervorhebung des Links als solcher wurde entfernt, um ihn für die Navigationsleiste anders zu gestalten. */
+
+#navbar li:hover {
+    background: #FFFC00;
+    color: black;
+    border: 1px solid #FFFC00;
+    border-radius: 5px;
+}
+/* Wenn man den Mauszeiger auf eine der Navigationskacheln bewegt, färbt diese sich ein, um dem Nutzenden zu zeigen, dass er mit einem Klick
+    zur gewählten Seite navigieren kann. */
+
+#navbar li.active {
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+/* Die Seite, auf der man sich gerade befindet, ist in der Navigationsleiste farbig umrahmt. */
